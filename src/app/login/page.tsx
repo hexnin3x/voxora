@@ -28,7 +28,7 @@ export default function Login() {
   console.log("RESPONSE:", data);
 
   if (data.success) {
-    router.push("/dashboard");
+    router.push("/dashboards");
   } else {
     alert(data.message || "Login failed");
   }
