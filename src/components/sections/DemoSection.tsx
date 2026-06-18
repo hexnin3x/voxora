@@ -24,8 +24,8 @@ export function DemoSection() {
         </FadeIn>
 
         <FadeIn delay={0.2} className="mt-16">
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl ring-1 ring-white/5">
-            <div className="relative aspect-video bg-surface-elevated">
+          <div className="overflow-hidden rounded-2xl border border-[rgba(254,254,254,0.08)] bg-[#1a1a0d] shadow-2xl ring-1 ring-white/5">
+            <div className="relative aspect-video bg-[#0e0e00]">
               <video
                 key={activeDemo.id}
                 className="h-full w-full object-cover"
@@ -36,17 +36,17 @@ export function DemoSection() {
                 <source src={activeDemo.video} type="video/mp4" />
               </video>
             </div>
-            <div className="border-t border-border px-6 py-5">
+            <div className="border-t border-[rgba(254,254,254,0.08)] px-6 py-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-medium tracking-wide text-blue-400 uppercase">
+                  <p className="text-xs font-medium tracking-wide text-[rgba(254,254,254,0.5)] uppercase">
                     {activeDemo.category}
                   </p>
                   <h3 className="mt-1 text-xl font-semibold text-white">{activeDemo.title}</h3>
-                  <p className="mt-2 text-sm text-muted">{activeDemo.description}</p>
+                  <p className="mt-2 text-sm text-[rgba(254,254,254,0.5)]">{activeDemo.description}</p>
                 </div>
-                <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500/10 sm:flex">
-                  <Play className="h-4 w-4 text-blue-400" />
+                <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[rgba(254,254,254,0.08)] sm:flex">
+                  <Play className="h-4 w-4 text-[#fefefe]" />
                 </div>
               </div>
             </div>
@@ -58,16 +58,17 @@ export function DemoSection() {
             <FadeIn key={demo.id} delay={0.1 * i}>
               <button
                 onClick={() => setActiveId(demo.id)}
+                data-magnetic
                 className={cn(
-                  "w-full rounded-xl border p-5 text-left transition-all duration-200",
+                  "w-full rounded-xl border p-5 text-left transition-all duration-200 cursor-none",
                   activeId === demo.id
-                    ? "border-blue-500/40 bg-blue-500/5 ring-1 ring-blue-500/20"
-                    : "border-border bg-surface hover:border-white/15 hover:bg-surface-elevated"
+                    ? "border-[rgba(254,254,254,0.3)] bg-[rgba(254,254,254,0.08)]"
+                    : "border-[rgba(254,254,254,0.08)] bg-transparent hover:border-[rgba(254,254,254,0.15)] hover:bg-[rgba(254,254,254,0.03)]"
                 )}
               >
-                <p className="text-xs font-medium text-blue-400">{demo.category}</p>
+                <p className="text-xs font-medium text-[rgba(254,254,254,0.5)]">{demo.category}</p>
                 <h4 className="mt-2 text-sm font-semibold text-white">{demo.title}</h4>
-                <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted">
+                <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[rgba(254,254,254,0.4)]">
                   {demo.description}
                 </p>
               </button>
@@ -78,3 +79,4 @@ export function DemoSection() {
     </section>
   );
 }
+

@@ -1,4 +1,3 @@
-import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
@@ -11,11 +10,11 @@ import { ROI } from "@/components/sections/ROI";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
+import { MagneticCursor } from "@/components/ui/magnetic-cursor";
 
 export default function Home() {
   return (
-    <>
-      <AnimatedBackground />
+    <MagneticCursor magneticFactor={0.3} cursorSize={28} blendMode="exclusion">
       <Navbar />
       <main>
         <Hero />
@@ -30,7 +29,8 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </MagneticCursor>
   );
 }
+
 

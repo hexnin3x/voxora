@@ -22,18 +22,18 @@ export function ConversationUI() {
   }, [visibleCount]);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl">
-      <div className="flex items-center gap-3 border-b border-border px-5 py-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10">
-          <PhoneIncoming className="h-5 w-5 text-green-400" />
+    <div className="overflow-hidden rounded-2xl border border-[rgba(254,254,254,0.08)] bg-[#0e0e00] shadow-2xl">
+      <div className="flex items-center gap-3 border-b border-[rgba(254,254,254,0.08)] px-5 py-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(254,254,254,0.08)]">
+          <PhoneIncoming className="h-5 w-5 text-[#fefefe]" />
         </div>
         <div>
           <p className="text-sm font-medium text-white">Incoming Call</p>
-          <p className="text-xs text-muted">New Patient — (555) 234-8901</p>
+          <p className="text-xs text-[rgba(254,254,254,0.5)]">New Patient — (555) 234-8901</p>
         </div>
         <div className="ml-auto flex items-center gap-1.5">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-green-400" />
-          <span className="text-xs text-green-400">Live</span>
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[#fefefe]" />
+          <span className="text-xs text-white">Live</span>
         </div>
       </div>
 
@@ -50,12 +50,12 @@ export function ConversationUI() {
               <div
                 className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   msg.role === "ai"
-                    ? "rounded-bl-md bg-surface-elevated text-white"
-                    : "rounded-br-md bg-blue-500/15 text-white"
+                    ? "rounded-bl-md bg-[rgba(254,254,254,0.06)] border border-[rgba(254,254,254,0.08)] text-white"
+                    : "rounded-br-md bg-[rgba(254,254,254,0.12)] border border-[rgba(254,254,254,0.12)] text-white"
                 }`}
               >
                 {msg.role === "ai" && (
-                  <span className="mb-1 block text-xs font-medium text-blue-400">AI Agent</span>
+                  <span className="mb-1 block text-xs font-medium text-[rgba(254,254,254,0.5)]">AI Agent</span>
                 )}
                 {msg.text}
               </div>
@@ -64,10 +64,11 @@ export function ConversationUI() {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center gap-2 border-t border-border px-5 py-3">
-        <Phone className="h-4 w-4 text-muted" />
-        <span className="text-xs text-muted">Call duration: 1:42</span>
+      <div className="flex items-center gap-2 border-t border-[rgba(254,254,254,0.08)] px-5 py-3">
+        <Phone className="h-4 w-4 text-[rgba(254,254,254,0.5)]" />
+        <span className="text-xs text-[rgba(254,254,254,0.5)]">Call duration: 1:42</span>
       </div>
     </div>
   );
 }
+

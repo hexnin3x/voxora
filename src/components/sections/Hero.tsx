@@ -2,9 +2,10 @@
 
 import { Play } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
-import { GradientText } from "@/components/ui/GradientText";
+import { NeonButton } from "@/components/ui/neon-button";
+import { BackgroundPaths } from "@/components/ui/background-paths";
 import { ConversationUI } from "@/components/mockups/ConversationUI";
 import { DashboardMockup } from "@/components/mockups/DashboardMockup";
 import { StatCard } from "@/components/mockups/StatCard";
@@ -13,20 +14,21 @@ import { HERO_STATS } from "@/lib/constants";
 export function Hero() {
   return (
     <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <BackgroundPaths />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
           >
-            <Badge className="mb-6 border-blue-500/20 bg-blue-500/10 text-blue-300">
+            <Badge variant="outline" className="mb-6 border-[rgba(254,254,254,0.12)] text-[rgba(254,254,254,0.5)] bg-transparent">
               AI Receptionists for Business
             </Badge>
 
             <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
               Never Miss Another{" "}
-              <GradientText>Customer Call</GradientText>
+              <span className="text-[rgba(254,254,254,0.5)]">Customer Call</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted md:text-xl">
@@ -35,13 +37,17 @@ export function Hero() {
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Button href="#contact" size="lg">
-                Book Demo
-              </Button>
-              <Button href="#demo" variant="secondary" size="lg">
-                <Play className="h-4 w-4" />
-                Watch Live Demo
-              </Button>
+              <Link href="#contact" className="inline-block">
+                <NeonButton variant="solid" size="lg" data-magnetic>
+                  Book Demo
+                </NeonButton>
+              </Link>
+              <Link href="#demo" className="inline-block">
+                <NeonButton variant="ghost" size="lg" data-magnetic className="flex items-center gap-2">
+                  <Play className="h-4 w-4 fill-current" />
+                  Watch Live Demo
+                </NeonButton>
+              </Link>
             </div>
           </motion.div>
 
@@ -82,3 +88,4 @@ export function Hero() {
     </section>
   );
 }
+

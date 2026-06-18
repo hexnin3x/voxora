@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { GradientText } from "./GradientText";
 
 interface SectionHeaderProps {
   badge?: string;
@@ -27,24 +26,31 @@ export function SectionHeader({
       )}
     >
       {badge && (
-        <p className="mb-4 text-sm font-medium tracking-wide text-blue-400 uppercase">
+        <span
+          className="inline-block mb-4 px-3 py-1 text-xs font-semibold tracking-widest uppercase rounded-full"
+          style={{
+            border: "1px solid rgba(254,254,254,0.12)",
+            color: "rgba(254,254,254,0.6)",
+          }}
+        >
           {badge}
-        </p>
+        </span>
       )}
       <h2 className="text-3xl font-semibold tracking-tight text-white md:text-4xl lg:text-5xl">
         {title}
         {highlight && (
           <>
             {" "}
-            <GradientText>{highlight}</GradientText>
+            <span className="text-[rgba(254,254,254,0.5)]">{highlight}</span>
           </>
         )}
       </h2>
       {description && (
-        <p className="mt-4 text-lg leading-relaxed text-muted md:text-xl">
+        <p className="mt-4 text-lg leading-relaxed text-[rgba(254,254,254,0.5)] md:text-xl">
           {description}
         </p>
       )}
     </div>
   );
 }
+

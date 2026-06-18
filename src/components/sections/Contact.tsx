@@ -17,7 +17,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="border-t border-border bg-surface/30 py-24 md:py-32">
+    <section id="contact" className="border-t border-[rgba(254,254,254,0.08)] bg-[#0e0e00] py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid gap-16 lg:grid-cols-2">
           <FadeIn>
@@ -31,19 +31,21 @@ export function Contact() {
 
             <div className="mt-8 space-y-4">
               <div>
-                <p className="text-sm text-muted">Email</p>
+                <p className="text-sm text-[rgba(254,254,254,0.5)]">Email</p>
                 <a
                   href={`mailto:${SITE.email}`}
-                  className="text-white transition-colors hover:text-blue-400"
+                  data-magnetic
+                  className="text-white transition-colors hover:text-[rgba(254,254,254,0.7)] hover:underline cursor-none inline-block"
                 >
                   {SITE.email}
                 </a>
               </div>
               <div>
-                <p className="text-sm text-muted">Phone</p>
+                <p className="text-sm text-[rgba(254,254,254,0.5)]">Phone</p>
                 <a
                   href={`tel:${SITE.phone}`}
-                  className="text-white transition-colors hover:text-blue-400"
+                  data-magnetic
+                  className="text-white transition-colors hover:text-[rgba(254,254,254,0.7)] hover:underline cursor-none inline-block"
                 >
                   {SITE.phone}
                 </a>
@@ -53,21 +55,21 @@ export function Contact() {
 
           <FadeIn delay={0.2}>
             {submitted ? (
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-border bg-surface p-12 text-center">
-                <CheckCircle className="h-12 w-12 text-green-400" />
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-[rgba(254,254,254,0.08)] bg-[#1a1a0d] p-12 text-center">
+                <CheckCircle className="h-12 w-12 text-[#fefefe]" />
                 <h3 className="mt-4 text-xl font-semibold text-white">Thank you!</h3>
-                <p className="mt-2 text-sm text-muted">
+                <p className="mt-2 text-sm text-[rgba(254,254,254,0.5)]">
                   We&apos;ll be in touch within one business day to schedule your demo.
                 </p>
               </div>
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="rounded-2xl border border-border bg-surface p-8"
+                className="rounded-2xl border border-[rgba(254,254,254,0.08)] bg-transparent p-8"
               >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="name" className="mb-2 block text-sm text-muted">
+                    <label htmlFor="name" className="mb-2 block text-sm text-[rgba(254,254,254,0.5)]">
                       Name
                     </label>
                     <input
@@ -80,7 +82,7 @@ export function Contact() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="business" className="mb-2 block text-sm text-muted">
+                    <label htmlFor="business" className="mb-2 block text-sm text-[rgba(254,254,254,0.5)]">
                       Business
                     </label>
                     <input
@@ -93,7 +95,7 @@ export function Contact() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="mb-2 block text-sm text-muted">
+                    <label htmlFor="email" className="mb-2 block text-sm text-[rgba(254,254,254,0.5)]">
                       Email
                     </label>
                     <input
@@ -106,7 +108,7 @@ export function Contact() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="phone" className="mb-2 block text-sm text-muted">
+                    <label htmlFor="phone" className="mb-2 block text-sm text-[rgba(254,254,254,0.5)]">
                       Phone
                     </label>
                     <input
@@ -120,7 +122,7 @@ export function Contact() {
                   </div>
                 </div>
                 <div className="mt-5">
-                  <label htmlFor="message" className="mb-2 block text-sm text-muted">
+                  <label htmlFor="message" className="mb-2 block text-sm text-[rgba(254,254,254,0.5)]">
                     Message
                   </label>
                   <textarea
@@ -131,7 +133,7 @@ export function Contact() {
                     placeholder="Tell us about your business and call volume..."
                   />
                 </div>
-                <Button type="submit" size="lg" className="mt-6 w-full">
+                <Button type="submit" size="lg" className="mt-6 w-full cursor-none" data-magnetic>
                   Book Demo
                 </Button>
               </form>
@@ -144,4 +146,5 @@ export function Contact() {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm text-white placeholder:text-muted/50 transition-colors focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30";
+  "w-full rounded-xl border border-[rgba(254,254,254,0.08)] bg-[rgba(254,254,254,0.03)] px-4 py-3 text-sm text-white placeholder:text-[rgba(254,254,254,0.3)] transition-colors focus:border-[#fefefe]/50 focus:outline-none focus:ring-1 focus:ring-[#fefefe]/30";
+
