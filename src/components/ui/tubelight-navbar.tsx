@@ -38,7 +38,7 @@ export function NavBar({ items, className }: NavBarProps) {
 
     if (pathname !== "/") return;
 
-    const sections = ["features", "demo", "contact"];
+    const sections = ["demo", "features", "contact"];
     const options = {
       root: null,
       rootMargin: "-40% 0px -50% 0px",
@@ -156,16 +156,16 @@ export function NavBar({ items, className }: NavBarProps) {
 
               {isActive && (
                 <motion.div
-                  layoutId="tubelight-lamp"
+                  layoutId={`${pathname}-tubelight-lamp`}
                   className="absolute inset-0 w-full rounded-full -z-10"
-                  style={{ background: "rgba(254,254,254,0.08)" }}
+                  style={{ background: "rgba(254,254,254,0.06)" }}
                   initial={false}
                   transition={{ type: "spring", stiffness: 350, damping: 35 }}
                 >
                   {/* Tubelight glow bar */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full bg-[#fefefe]">
-                    <div className="absolute w-16 h-8 bg-[rgba(254,254,254,0.15)] rounded-full blur-md -top-3 -left-4" />
-                    <div className="absolute w-10 h-6 bg-[rgba(254,254,254,0.10)] rounded-full blur-md -top-2 -left-1" />
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full bg-gradient-gemini">
+                    <div className="absolute w-16 h-8 bg-gradient-gemini rounded-full blur-md -top-3 -left-4 opacity-50" />
+                    <div className="absolute w-10 h-6 bg-gradient-gemini rounded-full blur-md -top-2 -left-1 opacity-30" />
                   </div>
                 </motion.div>
               )}
