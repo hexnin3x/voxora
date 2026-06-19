@@ -119,15 +119,21 @@ export function Feature108() {
   const activeTab = tabs.find((t) => t.value === active) ?? tabs[0];
 
   return (
-    <section id="features" className="py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section id="features" className="relative py-24 md:py-32 overflow-hidden bg-[#050505]">
+      {/* Ambient background glow */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[550px] h-[550px] bg-ambient-pink rounded-full blur-[130px] animate-ambient" style={{ animationDelay: "-8s" }} />
+        <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-ambient-blue rounded-full blur-[110px] animate-ambient" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
           <Badge
             variant="outline"
-            className="mb-4 border-[rgba(254,254,254,0.12)] text-[rgba(254,254,254,0.5)] bg-transparent"
+            className="badge-accent mb-4"
           >
-            Features
+            <span className="text-gradient-gemini">Features</span>
           </Badge>
           <h2 className="text-4xl font-semibold text-[#fefefe] md:text-5xl max-w-2xl mx-auto">
             Everything you need to{" "}
@@ -185,9 +191,9 @@ export function Feature108() {
                   <div>
                     <Badge
                       variant="outline"
-                      className="mb-4 border-[rgba(254,254,254,0.12)] text-[rgba(254,254,254,0.5)] bg-transparent"
+                      className="badge-accent mb-4"
                     >
-                      {tab.content.badge}
+                      <span className="text-gradient-gemini">{tab.content.badge}</span>
                     </Badge>
                     <h3 className="text-3xl font-semibold text-[#fefefe] leading-tight md:text-4xl">
                       {tab.content.title}
