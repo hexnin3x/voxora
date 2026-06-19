@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       }
 
       const client = await clientPromise;
-      const db = client.db("voice-agent"); 
+      const db = client.db(); 
       const appointmentsCollection = db.collection("appointments");
       let runtimeExecutionResult = "";
 

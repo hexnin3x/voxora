@@ -195,3 +195,211 @@ body {
   opacity: 0.6;
 }
 
+/* ============================================================
+   ORBITAL VISUALIZER ANIMATIONS & STYLES
+   ============================================================ */
+
+/* Animation for the pulsing effect */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Animation for the ping effect */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Custom animations for the orbital timeline */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+.duration-1000 {
+  transition-duration: 1000ms;
+}
+
+/* Backdrop blur */
+.backdrop-blur-lg {
+  backdrop-filter: blur(16px);
+}
+
+/* Custom gradients */
+.bg-gradient-orbital {
+  background: linear-gradient(to bottom right, #6366f1, #3b82f6, #14b8a6);
+}
+
+/* Z-index utilities */
+.z-10 {
+  z-index: 10;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+/* Custom shadows */
+.shadow-orbital {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Custom transforms */
+.scale-125 {
+  transform: scale(1.25);
+}
+
+.scale-150 {
+  transform: scale(1.5);
+}
+
+/* Custom opacity values */
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
+/* Custom border opacity */
+.border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.border-white\/30 {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.border-white\/40 {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Custom background opacity */
+.bg-black\/90 {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.bg-white\/50 {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.bg-white\/80 {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Custom text opacity */
+.text-white\/70 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.text-white\/80 {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================================
+   RETELL-STYLE Gradient ORB (Faded 3D Glass Sphere)
+   ============================================================ */
+
+@keyframes retell-orb-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.25), 
+                0 0 30px rgba(255, 255, 255, 0.15), 
+                0 0 60px rgba(255, 255, 255, 0.05);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4), 
+                0 0 45px rgba(255, 255, 255, 0.25), 
+                0 0 90px rgba(255, 255, 255, 0.12);
+  }
+}
+
+@keyframes retell-orb-morph {
+  0% {
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  }
+  33% {
+    border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
+  }
+  66% {
+    border-radius: 48% 52% 35% 65% / 40% 60% 40% 60%;
+  }
+  100% {
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  }
+}
+
+.retell-orb {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(20, 20, 20, 0.6) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  animation: retell-orb-pulse 4s ease-in-out infinite, retell-orb-morph 8s ease-in-out infinite;
+}
+
+/* ============================================================
+   AMBIENT CONNECTION CURVES (Concept B)
+   ============================================================ */
+
+@keyframes travel-inward-left {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes travel-inward-right {
+  0% {
+    stroke-dashoffset: -200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.pulse-line-left {
+  stroke-dasharray: 8 80;
+  animation: travel-inward-left 4s linear infinite;
+}
+
+.pulse-line-right {
+  stroke-dasharray: 8 80;
+  animation: travel-inward-right 4s linear infinite;
+}
+
+
+
+
+
