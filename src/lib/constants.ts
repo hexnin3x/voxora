@@ -24,7 +24,7 @@ export const SITE = {
   name: "Voxora",
   tagline: "AI Receptionists & Voice Agents for Business",
   email: "hello@voxora.ai",
-  phone: "7860135069",
+  phone: "+91 78601 35069",
 };
 
 export const NAV_LINKS = [
@@ -297,9 +297,9 @@ export const FAQ_ITEMS: FAQItem[] = [
 
 export const FOOTER_LINKS = {
   company: [
-    { label: "About", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Blog", href: "#" },
+    { label: "How It Works", href: "#how-it-works" },
+    { label: "FAQ", href: "#faq" },
+    { label: "Contact Us", href: "#contact" },
   ],
   product: [
     { label: "Features", href: "#features" },
