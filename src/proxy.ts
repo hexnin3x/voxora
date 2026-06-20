@@ -14,7 +14,7 @@ export async function proxy(req: NextRequest) {
 
     try {
       verifyToken(token);
-    } catch (err) {
+    } catch {
       // Invalid/expired token: clear cookie and redirect to login page
       const res = NextResponse.redirect(new URL("/login", req.nextUrl));
       res.cookies.delete("token");

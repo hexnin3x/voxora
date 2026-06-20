@@ -20,22 +20,19 @@ interface NavBarProps {
 
 export function NavBar({ items, className }: NavBarProps) {
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState(items[0].name);
-  const [isMobile, setIsMobile] = useState(false);
+  const [activeTab, setActiveTab] = useState(() => 
+    pathname === "/pricing" ? "Pricing" : items[0].name
+  );
+  const [prevPathname, setPrevPathname] = useState(pathname);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     if (pathname === "/pricing") {
       setActiveTab("Pricing");
-      return;
     }
+  }
 
+  useEffect(() => {
     if (pathname !== "/") return;
 
     const sections = ["demo", "features", "contact"];
@@ -53,7 +50,9 @@ export function NavBar({ items, className }: NavBarProps) {
             (item) => item.url.endsWith(`#${id}`) || item.url.endsWith(id)
           );
           if (matchingItem) {
-            setActiveTab(matchingItem.name);
+            setTimeout(() => {
+              setActiveTab(matchingItem.name);
+            }, 0);
           }
         }
       });

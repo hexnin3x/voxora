@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     }
 
     // 🔐 Verify token
-    verifyToken(token);
+    const decoded = verifyToken(token);
 
     // Parse URL pagination query params
     const { searchParams } = new URL(req.url);

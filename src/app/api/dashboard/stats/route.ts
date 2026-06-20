@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import Contact from "@/models/Contact";
+import Appointment from "@/models/Appointment";
 
 export async function GET() {
   try {
@@ -12,21 +13,18 @@ export async function GET() {
       return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    // ✅ IMPORTANT: capture result
-    const decoded = verifyToken(token);
-
-    if (!decoded) {
-      return Response.json({ message: "Invalid token" }, { status: 401 });
-    }
+    verifyToken(token);
 
     await connectDB();
 
-    const totalLeads = await Contact.countDocuments();
+    const [totalLeads, totalAppointments] = await Promise.all([
+      Contact.countDocuments(),
+      Appointment.countDocuments(),
+    ]);
 
-    return Response.json({ totalLeads });
+    return Response.json({ totalLeads, totalAppointments });
   } catch (err) {
     console.error("Stats API error:", err);
-
     return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 }

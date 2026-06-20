@@ -12,6 +12,16 @@ interface Contact {
   createdAt: string;
 }
 
+interface Appointment {
+  _id: string;
+  trackingCode: string;
+  name: string;
+  phone: string;
+  time: string;
+  cost?: string;
+  createdAt: string;
+}
+
 // ─── Date helpers ────────────────────────────────────────────────────────────
 
 function getWeekBounds(offsetWeeks: number) {
@@ -59,7 +69,7 @@ function sanitizeCSVField(value: string) {
   return val;
 }
 
-function exportCSV(contacts: Contact[], weekLabel: string) {
+function exportCSVLeads(contacts: Contact[], weekLabel: string) {
   const header = ["Name", "Email", "Company", "Phone", "Message", "Date"];
   const rows = contacts.map((c) => [
     sanitizeCSVField(c.name),
@@ -75,6 +85,26 @@ function exportCSV(contacts: Contact[], weekLabel: string) {
   const a = document.createElement("a");
   a.href = url;
   a.download = `voxora-leads-${weekLabel.replace(/\s/g, "-")}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportCSVAppointments(appointments: Appointment[], weekLabel: string) {
+  const header = ["Tracking Code", "Patient Name", "Phone", "Appointment Time", "Est. Cost", "Date Booked"];
+  const rows = appointments.map((a) => [
+    sanitizeCSVField(a.trackingCode),
+    sanitizeCSVField(a.name),
+    sanitizeCSVField(a.phone),
+    sanitizeCSVField(a.time),
+    sanitizeCSVField(a.cost || "$400"),
+    sanitizeCSVField(formatDateFull(a.createdAt)),
+  ]);
+  const csv = [header, ...rows].map((r) => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `voxora-appointments-${weekLabel.replace(/\s/g, "-")}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -175,20 +205,35 @@ function StatCard({
 
 export default function Dashboard() {
   const [allContacts, setAllContacts] = useState<Contact[]>([]);
+  const [allAppointments, setAllAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [weekOffset, setWeekOffset] = useState(0); // 0 = current week
+  const [activeTab, setActiveTab] = useState<"appointments" | "leads">("appointments");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/dashboard/contacts", { credentials: "include" });
-      if (!res.ok) {
-        throw new Error(`Failed to load data (Status ${res.status})`);
+      const [contactsRes, appointmentsRes] = await Promise.all([
+        fetch("/api/dashboard/contacts", { credentials: "include" }),
+        fetch("/api/dashboard/appointments", { credentials: "include" }),
+      ]);
+
+      if (!contactsRes.ok) {
+        throw new Error(`Failed to load Web Leads (Status ${contactsRes.status})`);
       }
-      const data = await res.json();
-      setAllContacts(data.contacts ?? []);
+      if (!appointmentsRes.ok) {
+        throw new Error(`Failed to load Appointments (Status ${appointmentsRes.status})`);
+      }
+
+      const [contactsData, appointmentsData] = await Promise.all([
+        contactsRes.json(),
+        appointmentsRes.json(),
+      ]);
+
+      setAllContacts(contactsData.contacts ?? []);
+      setAllAppointments(appointmentsData.appointments ?? []);
     } catch (err: any) {
       console.error("Dashboard fetch error:", err);
       setError(err?.message || "An unexpected error occurred while loading dashboard data.");
@@ -204,6 +249,7 @@ export default function Dashboard() {
   const { start, end } = getWeekBounds(weekOffset);
   const prevWeek = getWeekBounds(weekOffset - 1);
 
+  // ── Leads Filtering ────────────────────────────────────────────────────────
   const thisWeekLeads = allContacts.filter((c) => {
     const d = new Date(c.createdAt);
     return d >= start && d <= end;
@@ -214,25 +260,56 @@ export default function Dashboard() {
     return d >= prevWeek.start && d <= prevWeek.end;
   });
 
-  // Trend
-  const thisCount = thisWeekLeads.length;
-  const lastCount = lastWeekLeads.length;
-  let trendDir: "up" | "down" | "neutral" = "neutral";
-  let trendPct = 0;
-  if (lastCount > 0) {
-    trendPct = Math.round(((thisCount - lastCount) / lastCount) * 100);
-    trendDir = trendPct > 0 ? "up" : trendPct < 0 ? "down" : "neutral";
-  } else if (thisCount > 0) {
-    trendPct = 100;
-    trendDir = "up";
+  // Leads Trend
+  const thisLeadsCount = thisWeekLeads.length;
+  const lastLeadsCount = lastWeekLeads.length;
+  let leadsTrendDir: "up" | "down" | "neutral" = "neutral";
+  let leadsTrendPct = 0;
+  if (lastLeadsCount > 0) {
+    leadsTrendPct = Math.round(((thisLeadsCount - lastLeadsCount) / lastLeadsCount) * 100);
+    leadsTrendDir = leadsTrendPct > 0 ? "up" : leadsTrendPct < 0 ? "down" : "neutral";
+  } else if (thisLeadsCount > 0) {
+    leadsTrendPct = 100;
+    leadsTrendDir = "up";
   }
 
-  // Bar chart: Mon–Sun
+  // ── Appointments Filtering ──────────────────────────────────────────────────
+  const thisWeekAppts = allAppointments.filter((a) => {
+    const d = new Date(a.createdAt);
+    return d >= start && d <= end;
+  });
+
+  const lastWeekAppts = allAppointments.filter((a) => {
+    const d = new Date(a.createdAt);
+    return d >= prevWeek.start && d <= prevWeek.end;
+  });
+
+  // Appointments Trend
+  const thisApptsCount = thisWeekAppts.length;
+  const lastApptsCount = lastWeekAppts.length;
+  let apptsTrendDir: "up" | "down" | "neutral" = "neutral";
+  let apptsTrendPct = 0;
+  if (lastApptsCount > 0) {
+    apptsTrendPct = Math.round(((thisApptsCount - lastApptsCount) / lastApptsCount) * 100);
+    apptsTrendDir = apptsTrendPct > 0 ? "up" : apptsTrendPct < 0 ? "down" : "neutral";
+  } else if (thisApptsCount > 0) {
+    apptsTrendPct = 100;
+    apptsTrendDir = "up";
+  }
+
+  // Calculate stats based on active tab
+  const showAppts = activeTab === "appointments";
+  const thisCount = showAppts ? thisApptsCount : thisLeadsCount;
+  const trendDir = showAppts ? apptsTrendDir : leadsTrendDir;
+  const trendPct = showAppts ? apptsTrendPct : leadsTrendPct;
+
+  // Bar chart: Mon–Sun based on active tab
+  const activeListForChart = showAppts ? thisWeekAppts : thisWeekLeads;
   const chartData = Array.from({ length: 7 }, (_, i) => {
     const day = new Date(start);
     day.setDate(start.getDate() + i);
-    const count = thisWeekLeads.filter((c) => {
-      const d = new Date(c.createdAt);
+    const count = activeListForChart.filter((item) => {
+      const d = new Date(item.createdAt);
       return (
         d.getDate() === day.getDate() &&
         d.getMonth() === day.getMonth() &&
@@ -291,6 +368,30 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ── Tabs Switcher ── */}
+      <div className="flex border-b border-border mb-8 gap-4">
+        <button
+          onClick={() => setActiveTab("appointments")}
+          className={`pb-2.5 text-sm font-semibold border-b-2 transition-all cursor-pointer bg-transparent border-transparent ${
+            showAppts
+              ? "border-foreground text-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          🎙️ Voice Bookings
+        </button>
+        <button
+          onClick={() => setActiveTab("leads")}
+          className={`pb-2.5 text-sm font-semibold border-b-2 transition-all cursor-pointer bg-transparent border-transparent ${
+            !showAppts
+              ? "border-foreground text-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          📄 Landing Leads
+        </button>
+      </div>
+
       {error ? (
         <div className="bg-card border border-destructive rounded-xl p-8 sm:p-12 text-center flex flex-col items-center justify-center gap-4 shadow-sm">
           {/* Error Icon */}
@@ -316,28 +417,51 @@ export default function Dashboard() {
         <>
           {/* ── Stat cards ── */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <StatCard
-              label="This Week"
-              value={loading ? "—" : thisCount}
-              trend={loading ? undefined : { dir: trendDir, pct: Math.abs(trendPct) }}
-              sub="vs last week"
-            />
-            <StatCard
-              label="Last Week"
-              value={loading ? "—" : lastCount}
-              sub="leads captured"
-            />
-            <StatCard
-              label="All Time"
-              value={loading ? "—" : allContacts.length}
-              sub="total leads"
-            />
+            {showAppts ? (
+              <>
+                <StatCard
+                  label="Bookings This Week"
+                  value={loading ? "—" : thisCount}
+                  trend={loading ? undefined : { dir: trendDir, pct: Math.abs(trendPct) }}
+                  sub="vs last week"
+                />
+                <StatCard
+                  label="Est. Service Revenue"
+                  value={loading ? "—" : `$${(thisCount * 400).toLocaleString()}`}
+                  sub="predicted cashflow"
+                />
+                <StatCard
+                  label="All Time Bookings"
+                  value={loading ? "—" : allAppointments.length}
+                  sub="total call bookings"
+                />
+              </>
+            ) : (
+              <>
+                <StatCard
+                  label="Leads This Week"
+                  value={loading ? "—" : thisCount}
+                  trend={loading ? undefined : { dir: trendDir, pct: Math.abs(trendPct) }}
+                  sub="vs last week"
+                />
+                <StatCard
+                  label="Last Week Leads"
+                  value={loading ? "—" : lastLeadsCount}
+                  sub="leads captured"
+                />
+                <StatCard
+                  label="All Time Leads"
+                  value={loading ? "—" : allContacts.length}
+                  sub="total web leads"
+                />
+              </>
+            )}
           </div>
 
           {/* ── Bar chart ── */}
           <div className="bg-card border border-border rounded-xl p-5 sm:p-7 pb-5 mb-6">
             <p className="text-sm font-semibold text-foreground mb-10">
-              Daily Activity
+              Daily Activity ({showAppts ? "Appointments" : "Web Leads"})
             </p>
             {loading ? (
               <div className="h-[148px] flex items-center justify-center">
@@ -348,21 +472,29 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* ── This week's leads ── */}
+          {/* ── List view ── */}
           <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
             {/* Table header */}
             <div className="p-5 sm:px-6 border-b border-border flex items-center justify-between gap-4 flex-wrap">
               <div>
                 <h2 className="text-sm font-semibold text-foreground mb-0.5">
-                  {isCurrentWeek ? "This Week's Leads" : "Week's Leads"}
+                  {showAppts
+                    ? (isCurrentWeek ? "This Week's Voice Bookings" : "Week's Voice Bookings")
+                    : (isCurrentWeek ? "This Week's Web Leads" : "Week's Web Leads")}
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  {loading ? "Loading…" : `${thisCount} contact${thisCount !== 1 ? "s" : ""}`}
+                  {loading ? "Loading…" : `${thisCount} entry${thisCount !== 1 ? "ies" : ""}`}
                 </p>
               </div>
-              {thisCount > 0 && (
+              {thisCount > 0 && !loading && (
                 <button
-                  onClick={() => exportCSV(thisWeekLeads, weekLabel)}
+                  onClick={() => {
+                    if (showAppts) {
+                      exportCSVAppointments(thisWeekAppts, weekLabel);
+                    } else {
+                      exportCSVLeads(thisWeekLeads, weekLabel);
+                    }
+                  }}
                   className="bg-transparent border border-border rounded-lg px-3.5 py-1.5 text-xs font-semibold text-foreground cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-ring flex items-center gap-1.5 font-sans"
                 >
                   ↓ Export CSV
@@ -370,23 +502,70 @@ export default function Dashboard() {
               )}
             </div>
 
-            {/* Leads list */}
+            {/* List */}
             {loading ? (
               <div className="p-12 text-center text-muted-foreground text-xs sm:text-sm">
-                Loading leads…
+                Loading data…
               </div>
-            ) : thisWeekLeads.length === 0 ? (
+            ) : thisCount === 0 ? (
               <div className="p-14 text-center">
                 <p className="text-sm sm:text-base font-semibold text-foreground mb-1.5">
-                  No leads this week
+                  {showAppts ? "No bookings this week" : "No leads this week"}
                 </p>
                 <p className="text-xs sm:text-sm text-muted-foreground">
                   {isCurrentWeek
-                    ? "New leads will appear here as they come in."
-                    : "No leads were captured during this week."}
+                    ? "New records will appear here as activity occurs."
+                    : "No activity was recorded during this week."}
                 </p>
               </div>
+            ) : showAppts ? (
+              // 🎙️ APPOINTMENTS LIST
+              <div>
+                {thisWeekAppts.map((a, i) => (
+                  <div
+                    key={a._id}
+                    className={`flex items-start sm:items-center gap-3 sm:gap-4 p-4 sm:px-6 transition-colors duration-100 ${
+                      i < thisWeekAppts.length - 1 ? "border-b border-border" : ""
+                    } hover:bg-muted`}
+                  >
+                    {/* Avatar */}
+                    <div className="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center text-xs sm:text-sm font-semibold text-foreground flex-shrink-0">
+                      {(a.name || "?")[0].toUpperCase()}
+                    </div>
+
+                    {/* Content Group */}
+                    <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                      {/* Patient Name + phone */}
+                      <div className="min-w-0">
+                        <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                          {a.name || "Unknown Patient"}
+                        </p>
+                        <p className="text-[11px] sm:text-xs text-muted-foreground truncate">
+                          📞 {a.phone}
+                        </p>
+                      </div>
+
+                      {/* Code, Time & Price */}
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="text-[10px] sm:text-[11px] font-mono text-muted-foreground bg-muted border border-border rounded px-2 py-0.5 whitespace-nowrap">
+                          🔑 {a.trackingCode}
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] font-medium text-foreground bg-muted border border-border rounded px-2 py-0.5 whitespace-nowrap">
+                          📅 {a.time}
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] font-semibold text-emerald-400 whitespace-nowrap">
+                          {a.cost || "$400"}
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap">
+                          {formatDateFull(a.createdAt)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
+              // 📄 CONTACT LEADS LIST
               <div>
                 {thisWeekLeads.map((c, i) => (
                   <div
@@ -408,7 +587,7 @@ export default function Dashboard() {
                           {c.name || "Unknown"}
                         </p>
                         <p className="text-[11px] sm:text-xs text-muted-foreground truncate">
-                          {c.email}
+                          ✉️ {c.email}
                         </p>
                       </div>
 
@@ -416,7 +595,7 @@ export default function Dashboard() {
                       <div className="flex items-center gap-3 flex-wrap">
                         {c.company && (
                           <span className="text-[10px] sm:text-[11px] font-medium text-muted-foreground bg-muted border border-border rounded px-2 py-0.5 whitespace-nowrap">
-                            {c.company}
+                            🏢 {c.company}
                           </span>
                         )}
                         <span className="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap">

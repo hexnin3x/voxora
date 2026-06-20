@@ -1,7 +1,7 @@
 "use client";
 
 import { Mic } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface AIVoiceInputProps {
@@ -25,26 +25,37 @@ export function AIVoiceInput({
   const [time, setTime] = useState(0);
   const [isClient, setIsClient] = useState(false);
   const [isDemo, setIsDemo] = useState(demoMode);
+  const [heights, setHeights] = useState<number[]>([]);
+
+  const timeRef = useRef(time);
+  useEffect(() => {
+    timeRef.current = time;
+  }, [time]);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    const randomHeights = Array.from({ length: visualizerBars }, () => 20 + Math.random() * 80);
+    setHeights(randomHeights);
+    const timer = setTimeout(() => setIsClient(true), 0);
+    return () => clearTimeout(timer);
+  }, [visualizerBars]);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
     if (submitted) {
       onStart?.();
-      intervalId = setInterval(() => {
+      const intervalId = setInterval(() => {
         setTime((t) => t + 1);
       }, 1000);
+      return () => {
+        clearInterval(intervalId);
+      };
     } else {
-      onStop?.(time);
-      setTime(0);
+      const finalTime = timeRef.current;
+      if (finalTime > 0) {
+        onStop?.(finalTime);
+        setTimeout(() => setTime(0), 0);
+      }
     }
-
-    return () => clearInterval(intervalId);
-  }, [submitted, time, onStart, onStop]);
+  }, [submitted, onStart, onStop]);
 
   useEffect(() => {
     if (!isDemo) return;
@@ -125,9 +136,9 @@ export function AIVoiceInput({
                   : "bg-black/10 dark:bg-white/10 h-1"
               )}
               style={
-                submitted && isClient
+                submitted && isClient && heights[i] !== undefined
                   ? {
-                      height: `${20 + Math.random() * 80}%`,
+                      height: `${heights[i]}%`,
                       animationDelay: `${i * 0.05}s`,
                     }
                   : undefined

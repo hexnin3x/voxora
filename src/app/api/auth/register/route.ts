@@ -23,11 +23,11 @@ export async function POST(req: Request) {
 
     await connectDB();
 
-    // Disable registration if an admin account already exists
-    const adminExists = await User.findOne();
-    if (adminExists) {
+    // ✅ Disable registration if a user account already exists
+    const userExists = await User.findOne();
+    if (userExists) {
       return NextResponse.json(
-        { message: "Registrations are closed. Only one admin account is allowed." },
+        { message: "Registrations are closed. Only one user account is allowed." },
         { status: 403 }
       );
     }
@@ -68,6 +68,7 @@ export async function POST(req: Request) {
       name,
       email,
       password: hashedPassword,
+      role: 'admin',
     });
 
     return NextResponse.json({ success: true });

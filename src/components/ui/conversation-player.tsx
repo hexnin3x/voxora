@@ -21,21 +21,28 @@ interface ConversationPlayerProps {
 
 export function ConversationPlayer({
   audioSrc,
-  transcript,
+  transcript: _transcript,
   activeDemoId = "dental",
   onSelectDemoId,
 }: ConversationPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const [prevAudioSrc, setPrevAudioSrc] = useState(audioSrc);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile] = useState(() => 
+    typeof window !== "undefined" ? window.innerWidth < 768 : true
+  );
   const [time, setTime] = useState(0);
+
+  if (audioSrc !== prevAudioSrc) {
+    setPrevAudioSrc(audioSrc);
+    setIsPlaying(false);
+  }
 
   // Responsive layout check for orbit radius
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -43,7 +50,6 @@ export function ConversationPlayer({
 
   // Reset audio playback state when source changes
   useEffect(() => {
-    setIsPlaying(false);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();
