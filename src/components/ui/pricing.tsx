@@ -279,7 +279,7 @@ export function Pricing({
           </div>
 
           {/* Active Card display with smooth fade/slide transition */}
-          <div className="w-full min-h-[480px] overflow-hidden">
+          <div className="w-full min-h-[480px] px-4 overflow-visible">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeMobilePlan}
@@ -287,7 +287,7 @@ export function Pricing({
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -15 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="w-full h-full"
+                className="w-full h-full pt-4"
               >
                 {renderPlanCard(plans[activeMobilePlan], activeMobilePlan, false)}
               </motion.div>
