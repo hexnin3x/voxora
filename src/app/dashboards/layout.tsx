@@ -114,7 +114,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <MagneticCursor magneticFactor={0.3} cursorSize={28} blendMode="exclusion">
-      <div className="flex flex-col lg:flex-row min-h-screen bg-background font-sans">
+      <div className="flex flex-col lg:flex-row min-h-screen bg-background font-sans max-w-[100vw] overflow-clip">
         {/* Desktop Sidebar */}
         <aside className="hidden lg:flex w-[240px] flex-shrink-0 bg-card border-r border-border flex-col p-6 h-screen sticky top-0">
           {renderSidebarContent(false)}
@@ -164,7 +164,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </AnimatePresence>
 
         {/* Main Content Area */}
-        <main className="flex-grow overflow-x-hidden pt-16 lg:pt-0 min-h-screen">
+        <main className="flex-grow overflow-x-clip pt-16 lg:pt-0 min-h-screen max-w-[100vw]">
           {children}
         </main>
       </div>

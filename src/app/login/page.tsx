@@ -51,7 +51,7 @@ export default function Login() {
 
   return (
     <MagneticCursor magneticFactor={0.3} cursorSize={28} blendMode="exclusion">
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6 font-sans relative overflow-x-hidden">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6 font-sans relative overflow-clip max-w-[100vw]">
         {/* Background glow */}
         <div className="fixed inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(115,115,115,0.12)_0%,transparent_70%)] pointer-events-none" />
 

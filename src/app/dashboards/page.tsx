@@ -91,7 +91,7 @@ function BarChart({ data }: { data: { label: string; count: number }[] }) {
         return (
           <div
             key={d.label}
-            className="flex flex-col items-center flex-grow flex-shrink basis-0 relative"
+            className="flex flex-col items-center flex-grow flex-shrink basis-0 min-w-0 relative"
           >
             {/* Bar Track & Fill Container */}
             <div className="w-full max-w-[32px] h-[140px] relative bg-muted rounded-md flex items-end">
@@ -246,7 +246,7 @@ export default function Dashboard() {
   const isCurrentWeek = weekOffset === 0;
 
   return (
-    <div className="p-3.5 sm:p-10 pb-24 max-w-[1100px] w-full mx-auto font-sans">
+    <div className="p-3.5 sm:p-10 pb-24 max-w-[1100px] w-full mx-auto font-sans box-border">
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-8 sm:mb-10 gap-6">
         <div>
@@ -335,7 +335,7 @@ export default function Dashboard() {
           </div>
 
           {/* ── Bar chart ── */}
-          <div className="bg-card border border-border rounded-xl p-5 sm:p-7 pb-5 mb-6">
+          <div className="bg-card border border-border rounded-xl p-5 sm:p-7 pb-5 mb-6 overflow-hidden">
             <p className="text-sm font-semibold text-foreground mb-10">
               Daily Activity
             </p>
@@ -415,7 +415,7 @@ export default function Dashboard() {
                       {/* Company & Date */}
                       <div className="flex items-center gap-3 flex-wrap">
                         {c.company && (
-                          <span className="text-[10px] sm:text-[11px] font-medium text-muted-foreground bg-muted border border-border rounded px-2 py-0.5 whitespace-nowrap">
+                          <span className="text-[10px] sm:text-[11px] font-medium text-muted-foreground bg-muted border border-border rounded px-2 py-0.5 truncate max-w-[100px] sm:max-w-none">
                             {c.company}
                           </span>
                         )}

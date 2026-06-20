@@ -273,6 +273,11 @@ export const MagneticCursor: FC<MagneticCursorProps> = ({
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
       cleanupFunctions.forEach((fn) => fn());
+      // Clear all GSAP-applied inline styles to prevent transform leaking
+      // during React reconciliation (e.g. when isTouchDevice changes)
+      if (cursorEl) {
+        gsap.set(cursorEl, { clearProps: "all" });
+      }
     };
   }, [disableOnTouch, isTouchDevice, hoverPadding, hoverAttribute, cursorColor, shape]);
 
@@ -295,11 +300,17 @@ export const MagneticCursor: FC<MagneticCursorProps> = ({
       contrastBoost !== 1 ? `contrast(${contrastBoost})` : "none",
     WebkitBackdropFilter:
       contrastBoost !== 1 ? `contrast(${contrastBoost})` : "none",
+    contain: "layout style paint",
+    overflow: "hidden",
   };
 
   return (
     <>
+      {/* key="__mc" prevents React from reusing this DOM node for page content
+          when the component switches to touch-mode (isTouchDevice=true).
+          Without the key, GSAP's translate(-50%,-50%) leaks onto the page div. */}
       <div
+        key="__mc"
         ref={cursorRef}
         className={`magnetic-cursor ${cursorClassName}`}
         style={styles}

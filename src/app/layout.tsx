@@ -37,7 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body suppressHydrationWarning>{children}</body>
+      <body className="overflow-x-clip max-w-[100vw]" suppressHydrationWarning>{children}</body>
     </html>
   );
 }

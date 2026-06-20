@@ -157,13 +157,13 @@ export function NavBar({ items, className }: NavBarProps) {
               {isActive && (
                 <motion.div
                   layoutId={`${pathname}-tubelight-lamp`}
-                  className="absolute inset-0 w-full rounded-full -z-10"
+                  className="absolute inset-0 w-full rounded-full -z-10 overflow-hidden"
                   style={{ background: "rgba(254,254,254,0.06)" }}
                   initial={false}
                   transition={{ type: "spring", stiffness: 350, damping: 35 }}
                 >
                   {/* Tubelight glow bar */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full bg-gradient-gemini">
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-t-full bg-gradient-gemini overflow-hidden">
                     <div className="absolute w-16 h-8 bg-gradient-gemini rounded-full blur-md -top-3 -left-4 opacity-50" />
                     <div className="absolute w-10 h-6 bg-gradient-gemini rounded-full blur-md -top-2 -left-1 opacity-30" />
                   </div>

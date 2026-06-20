@@ -126,8 +126,8 @@
    ============================================================ */
 html, body {
   width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+  max-width: 100vw;
+  overflow-x: clip;
 }
 
 html {
@@ -141,11 +141,18 @@ body {
   cursor: none; /* MagneticCursor takes over */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  position: relative;
 }
 
 /* Restore default cursor for touch / in case cursor component is missing */
 @media (hover: none) {
   body { cursor: auto; }
+}
+
+/* Magnetic cursor must never expand the scrollable area */
+.magnetic-cursor {
+  contain: layout;
 }
 
 @media (hover: none), (pointer: coarse) {
