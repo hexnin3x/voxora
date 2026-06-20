@@ -195,7 +195,7 @@ export function Pricing({
 
   return (
     <section id="pricing" className="py-24 md:py-32 w-full max-w-full overflow-x-hidden">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         {/* Header */}
         <div className="text-center mb-12">
           <span
@@ -208,7 +208,7 @@ export function Pricing({
         </div>
 
         {/* Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-12">
+        <div className="flex items-center justify-center gap-2 sm:gap-4 flex-wrap mb-12">
           <Label
             htmlFor="billing-toggle"
             className={cn(
@@ -246,7 +246,7 @@ export function Pricing({
         <div className="md:hidden w-full flex flex-col items-center">
           {/* Tab buttons */}
           <div 
-            className="flex items-center justify-center p-1 border rounded-full mb-8 w-full max-w-[320px] mx-auto"
+            className="flex items-center justify-center p-1 border rounded-full mb-8 w-full max-w-[280px] mx-auto"
             style={{
               background: "rgba(25,25,25,0.75)",
               borderColor: "rgba(254,254,254,0.06)",

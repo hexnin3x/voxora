@@ -85,7 +85,7 @@ function BarChart({ data }: { data: { label: string; count: number }[] }) {
   const max = Math.max(...data.map((d) => d.count), 1);
 
   return (
-    <div className="flex justify-between items-end h-[150px] pt-6 gap-2 sm:gap-3">
+    <div className="flex justify-between items-end h-[150px] pt-6 gap-1 sm:gap-3">
       {data.map((d) => {
         const barHeightPct = (d.count / max) * 100;
         return (
@@ -246,7 +246,7 @@ export default function Dashboard() {
   const isCurrentWeek = weekOffset === 0;
 
   return (
-    <div className="p-4 sm:p-10 pb-24 max-w-[1100px] w-full mx-auto font-sans">
+    <div className="p-3.5 sm:p-10 pb-24 max-w-[1100px] w-full mx-auto font-sans">
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-8 sm:mb-10 gap-6">
         <div>
