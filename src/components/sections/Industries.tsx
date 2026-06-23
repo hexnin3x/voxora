@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
@@ -19,7 +19,7 @@ const industries: IndustryData[] = [
   {
     title: "Dental Clinics",
     description: "Reduce front desk workload while capturing every new patient inquiry.",
-    imageUrl: "/images/dental.png",
+    imageUrl: "/images/dental.webp",
     benefits: [
       "Reduce no-shows with SMS reminders",
       "Capture after-hours patients",
@@ -29,7 +29,7 @@ const industries: IndustryData[] = [
   {
     title: "Cosmetic Clinics",
     description: "Handle high-value consultation requests with a premium, professional experience.",
-    imageUrl: "/images/cosmetic.png",
+    imageUrl: "/images/cosmetic.webp",
     benefits: [
       "Qualify treatment interest",
       "Book consultation slots",
@@ -39,7 +39,7 @@ const industries: IndustryData[] = [
   {
     title: "Law Firms",
     description: "Screen intake calls and collect case details before attorney follow-up.",
-    imageUrl: "/images/legal.png",
+    imageUrl: "/images/legal.webp",
     benefits: [
       "Pre-qualify potential clients",
       "Capture case details accurately",
@@ -49,7 +49,7 @@ const industries: IndustryData[] = [
   {
     title: "Real Estate",
     description: "Qualify buyers and sellers and schedule property viewings around the clock.",
-    imageUrl: "/images/realestate.png",
+    imageUrl: "/images/realestate.webp",
     benefits: [
       "Capture lead intent instantly",
       "Schedule property viewings",
@@ -59,7 +59,7 @@ const industries: IndustryData[] = [
   {
     title: "Home Services",
     description: "Book service calls and dispatch technicians without tying up your team.",
-    imageUrl: "/images/homeservices.png",
+    imageUrl: "/images/homeservices.webp",
     benefits: [
       "Book service appointments",
       "Capture job details",
@@ -70,6 +70,14 @@ const industries: IndustryData[] = [
 
 export function Industries() {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Preload all industry images on mount to ensure instantaneous tab transitions
+  useEffect(() => {
+    industries.forEach((industry) => {
+      const img = new window.Image();
+      img.src = industry.imageUrl;
+    });
+  }, []);
 
   const handleNext = () =>
     setCurrentIndex((index) => (index + 1) % industries.length);

@@ -37,6 +37,7 @@
     "next": "16.2.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "sharp": "^0.35.2",
     "tailwind-merge": "^3.6.0",
     "three": "^0.184.0",
     "vecteur": "^0.3.0",
